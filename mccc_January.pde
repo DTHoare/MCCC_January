@@ -20,19 +20,21 @@ void draw(){
   triangles = 12;
   for(int i = 1; i < triangles + 1; i++) {
     //rotate counter clockwise 90 degrees
-    float angle = -PI/2;
+    //add rotation over time, plus offset each triangle slightly
+    //gives organic movement
+    float angle = PI/2 + PI/4 * sin(0.5 * frameCount * revs + i/(2*PI));
     fill(colors[i % 3]);
     //triangles at front bop more
     //simulates 3d movement or something
     float x = 0.5 * width + 10 * (i * sin(frameCount * revs) );
     //force one of the integers to a float to get float arithmetic
     //double frequency to get all 3 corners in animation bop
-    float y = 0.8 * height + 100 * ( (float(i)/triangles) * sin(2*frameCount * revs) );
+    float y = 0.3 * height + 10 * ( i * sin(0.5*frameCount * revs) );
     symmTriangle(x, y, angle, width/i, width/i);
   }
   
   //save
-  saveLoop(fps);
+  //saveLoop(2*fps);
 }
 
 
