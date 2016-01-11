@@ -15,26 +15,24 @@ void setup(){
 
 void draw(){
   background(cGreen);
-  //background triangles
-  int triangles = 6;
+  int triangles;
+  //foreground triangles
+  triangles = 12;
   for(int i = 1; i < triangles + 1; i++) {
-    float angle = 3/2 * PI;
+    //rotate counter clockwise 90 degrees
+    float angle = -PI/2;
     fill(colors[i % 3]);
-    float x = width / (i * sin(frameCount * revs) );
-    float y = height / (i * sin(frameCount * revs) );
+    //triangles at front bop more
+    //simulates 3d movement or something
+    float x = 0.5 * width + 10 * (i * sin(frameCount * revs) );
+    //force one of the integers to a float to get float arithmetic
+    //double frequency to get all 3 corners in animation bop
+    float y = 0.8 * height + 100 * ( (float(i)/triangles) * sin(2*frameCount * revs) );
     symmTriangle(x, y, angle, width/i, width/i);
-  }
-  //spinning triangles
-  triangles = 6;
-  for(int i = 0; i < triangles; i++){
-    //2 * PI / frameRate = 1 rev/s
-    float angle = frameCount * revs + i * 2 * PI/6;
-    fill(colors[i % 3]);
-    symmTriangle(width/2, height/2, angle, width/2 / (i+1), width/2 / (i+1));
   }
   
   //save
-  //saveLoop(fps);
+  saveLoop(fps);
 }
 
 
