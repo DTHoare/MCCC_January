@@ -18,7 +18,7 @@ void draw(){
   int triangles;
   //foreground triangles
   triangles = 16;
-  int sections = 7;
+  int sections = 6;
   //for loops nested such that 3d effect is preserved
   for(int i = 1; i < triangles + 1; i++) {
     for(int section = 0; section < sections; section++){
@@ -49,12 +49,12 @@ void draw(){
       float x = 0.5 * width + width*0.1*cos(angle)/i;
       //add more movement
       //similar function to other organic movement
-      x -= (200/i) * omega;
+      x -= 5 * (i * exp(-t*0.1) * sin(0.5 * t * revs + i/(2*PI)) );
       
       
       float y = 0.5 * height + height*0.1*sin(angle)/i;
       //double frequency to get all 3 corners in animation bop
-      y -= 5 * ( i * exp(-t*0.1) * sin(1 * t * revs + i/(2*PI)) );
+      y -= 5 * ( i * exp(-t*0.1) * sin(2 * t * revs + i/(2*PI)) );
       symmTriangle(x, y, angle, height/(2*i), width/(2*i));
     }
   }
