@@ -17,21 +17,48 @@ void draw(){
   background(cGreen);
   int triangles;
   //foreground triangles
-  triangles = 12;
+  triangles = 16;
+  int sections = 6;
+  //for loops nested such that 3d effect is preserved
   for(int i = 1; i < triangles + 1; i++) {
-    //rotate counter clockwise 90 degrees
-    //add rotation over time, plus offset each triangle slightly
-    //gives organic movement
-    float angle = PI/2 + PI/4 * sin(0.5 * frameCount * revs + i/(2*PI));
-    fill(colors[i % 3]);
-    //triangles at front bop more
-    //simulates 3d movement or something
-    float x = 0.5 * width + 10 * (i * sin(frameCount * revs) );
-    //force one of the integers to a float to get float arithmetic
-    //double frequency to get all 3 corners in animation bop
-    float y = 0.3 * height + 10 * ( i * sin(0.5*frameCount * revs) );
-    symmTriangle(x, y, angle, width/i, width/i);
+    for(int section = 0; section < sections; section++){
+      
+      //add rotation over time, plus offset each triangle slightly
+  
+      //initial angle
+      float angle = section*2*PI/sections;
+      
+      //rotate to next position in circle
+      float omega = periodicSigmoid(2*PI/sections, 0.4, 2*fps);
+      angle += omega;
+      
+      //gives organic movement
+      //so that it bounces after each sigmoid
+      //want a damped simple harmonic motion
+      //lasts two periods
+      //starts at 1 period (time of sigmoid jump)
+      float t = (frameCount+fps) % (2*fps);
+      angle += PI/9 * exp(-t*0.1) * sin(2 * t * revs + i/(2*PI));
+      fill(colors[i % 3]);
+      
+      //triangles at front bop more
+      //simulates 3d movement or something
+      
+      //start point as rotated about centre
+      //but travel towards centre as they tower up
+      float x = 0.5 * width + width*0.1*cos(angle)/i;
+      //add more movement
+      //similar function to other organic movement
+      x -= 5 * (i * exp(-t*0.1) * sin(0.5 * t * revs + i/(2*PI)) );
+      
+      
+      float y = 0.5 * height + height*0.1*sin(angle)/i;
+      //double frequency to get all 3 corners in animation bop
+      y -= 5 * ( i * exp(-t*0.1) * sin(2 * t * revs + i/(2*PI)) );
+      symmTriangle(x, y, angle, height/(2*i), width/(2*i));
+    }
   }
+  
   
   //save
   //saveLoop(2*fps);
@@ -67,4 +94,16 @@ void saveLoop(float frames){
   if (frameCount < frames) {
     saveFrame("frame-###.gif");
   }
+}
+
+//this is a magical function that I once sat down with pen and paper and worked out
+//alas I cannot remember what I did
+//it transitions smoothly from 0 to magnitude as a sigmoid
+//higher transitionSpeed increases the speed from 0 to magnitude
+//period is the time between jumps
+float periodicSigmoid(float magnitude, float transitionSpeed, float period) {
+  float x;
+  x = magnitude;
+  x /= (1+exp(-transitionSpeed*((frameCount%period)-period/2)));
+  return x;
 }
