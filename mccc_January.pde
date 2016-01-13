@@ -17,7 +17,8 @@ void draw(){
   background(cGreen);
   int triangles;
   //foreground triangles
-  triangles = 16;
+  //yes there are many
+  triangles = 699;
   int sections = 6;
   //for loops nested such that 3d effect is preserved
   for(int i = 1; i < triangles + 1; i++) {
@@ -41,21 +42,16 @@ void draw(){
       angle += PI/9 * exp(-t*0.1) * sin(2 * t * revs + i/(2*PI));
       fill(colors[i % 3]);
       
-      //triangles at front bop more
-      //simulates 3d movement or something
-      
       //start point as rotated about centre
       //but travel towards centre as they tower up
       float x = 0.5 * width + width*0.1*cos(angle)/i;
-      //add more movement
-      //similar function to other organic movement
-      x -= 5 * (i * exp(-t*0.1) * sin(0.5 * t * revs + i/(2*PI)) );
-      
-      
       float y = 0.5 * height + height*0.1*sin(angle)/i;
-      //double frequency to get all 3 corners in animation bop
-      y -= 5 * ( i * exp(-t*0.1) * sin(2 * t * revs + i/(2*PI)) );
-      symmTriangle(x, y, angle, height/(2*i), width/(2*i));
+      //add more movement
+      //similar function to other organic movement     
+      
+      //fairly impirical height and width by experimentation
+      //rapidly going small, shifted so to avoid big gaps around i= 0-5 range
+      symmTriangle(x, y, angle, 2*height/(2*sqrt(i+5)), 2*width/(2*sqrt(i+5)));
     }
   }
   
