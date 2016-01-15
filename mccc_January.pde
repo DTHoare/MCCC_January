@@ -20,7 +20,7 @@ void draw(){
   float width_;
   //foreground triangles
   //yes there are many
-  triangles = 597;
+  triangles = 3999;
   int sections = 8;
   //for loops nested such that 3d effect is preserved
   for(int i = 1; i < triangles + 1; i++) {
@@ -50,15 +50,15 @@ void draw(){
       float y = 0.5 * height + height*0.1*sin(angle)/i;
       
       //add more movement
-      //remove *i for pulsating snowflake
-      x +=  50 * sin(1 * t * revs)*cos(angle)*i;
-      y +=  50 * sin(1 * t * revs)*sin(angle)*i;
+      //pow((-1),i) alternates sign, makes more interesting patterns
+      x +=  75 * sin(1 * t * revs)*cos(angle) * pow((-1),i);
+      y +=  75 * sin(1 * t * revs)*sin(angle) * pow((-1),i);
+      
       //fairly impirical height and width by experimentation
       //rapidly going small, shifted so to avoid big gaps around i= 0-5 range
-      
       //make height and width pulsate
-      height_ = 1.5*height/(2*sqrt(i+5)) + 50 * sin(2 * t * revs);
-      width_ = 1.5*width/(2*sqrt(i+5)) + 50 *  cos(1 * t * revs);
+      height_ = 1.1*height/(2*sqrt(i+5)) + 50 * sin(2 * t * revs);
+      width_ = 1.1*width/(2*sqrt(i+5)) + 50 *  cos(1 * t * revs);
       symmTriangle(x, y, angle, height_, width_);
     }
   }
