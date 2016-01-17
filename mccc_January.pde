@@ -20,8 +20,8 @@ void draw(){
   float width_;
   //foreground triangles
   //yes there are many
-  triangles = 3999;
-  int sections = 8;
+  triangles = 55;
+  int sections = 16;
   //for loops nested such that 3d effect is preserved
   for(int i = 1; i < triangles + 1; i++) {
     for(int section = 0; section < sections; section++){
@@ -41,31 +41,29 @@ void draw(){
       //lasts two periods
       //starts at 1 period (time of sigmoid jump)
       float t = (frameCount+fps) % (2*fps);
-      angle += PI/9 * exp(-t*0.1) * sin(2 * t * revs + i/(2*PI));
+      angle += PI/9 * exp(-t*0.1) * sin(2 * t * revs + i/(4*PI));
       fill(colors[i % 3]);
       
       //start point as rotated about centre
-      //but travel towards centre as they tower up
-      float x = 0.5 * width + width*0.1*cos(angle)/i;
-      float y = 0.5 * height + height*0.1*sin(angle)/i;
-      
-      //add more movement
-      //pow((-1),i) alternates sign, makes more interesting patterns
-      x +=  75 * sin(1 * t * revs)*cos(angle) * pow((-1),i);
-      y +=  75 * sin(1 * t * revs)*sin(angle) * pow((-1),i);
+      //but travel outerwards as they tower up
+      float x = 0.5 * width + width*0.1*cos(angle)*sqrt(i);
+      float y = 0.5 * height + height*0.1*sin(angle)*sqrt(i);
       
       //fairly impirical height and width by experimentation
       //rapidly going small, shifted so to avoid big gaps around i= 0-5 range
       //make height and width pulsate
-      height_ = 1.1*height/(2*sqrt(i+5)) + 50 * sin(2 * t * revs);
-      width_ = 1.1*width/(2*sqrt(i+5)) + 50 *  cos(1 * t * revs);
-      symmTriangle(x, y, angle, height_, width_);
+      //draws traingles at 90 degree angle to lines of symmetry
+      //they flap around like flags
+      //or at 180 degrees for explosions
+      height_ = 0.9*height * sin(1 * t * revs + i/(4*PI))/(2*sqrt(i+5));
+      width_ = 1.1*width/(2*sqrt(i+5)) + 50 *  cos(0.5 * t * revs);
+      symmTriangle(x, y, (angle+PI), height_, width_);
     }
   }
   
   
   //save
-  //saveLoop(2*fps);
+  saveLoop(2*fps);
 }
 
 
